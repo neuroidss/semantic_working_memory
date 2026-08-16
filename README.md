@@ -91,7 +91,13 @@ To eliminate Brownian drift and phase-wrapping, cross-spectral matrices are comp
 $$i\text{PLV}_k(p) = \Im\left( \mathbf{\Psi}_k(p) \cdot \mathbf{\Psi}_0^*(p) \right) \in \mathbb{R}^{120}$$
 
 ### Stage 4: SVD Vocabulary Subspace Projection
-To prevent chaotic out-of-distribution latent trajectories, the 120-pair phase vectors are projected onto the top 120 singular vectors $\mathbf{V}_{120} \in \mathbb{R}^{120 \times 768}$ computed via SVD from the complete 49,408-token CLIP vocabulary embedding matrix $\mathbf{E}_{\text{vocab}}$: 
+To prevent chaotic out-of-distribution latent trajectories, the 120-pair phase vectors are projected onto the top 120 singular vectors 
+
+$$\mathbf{V}_{120} \in \mathbb{R}^{120 \times 768}$$
+
+computed via SVD from the complete 49,408-token CLIP vocabulary embedding matrix 
+
+$$\mathbf{E}_{\text{vocab}}$$
 
 $$\mathbf{h}_k = \frac{\mathrm{iPLV}_k \cdot \mathbf{V}_{120}}{|\mathrm{iPLV}_k \cdot \mathbf{V}_{120}| + \epsilon} \in \mathbb{R}^{768}$$
 
