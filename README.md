@@ -102,7 +102,7 @@ where $\text{Encode}(\text{""})$ provides the structural positional encodings of
 | Component | Port / Interface | Role | Throughput |
 |---|---|---|---|
 | **`brain_server.py`** | `localhost:6000` | GPU daemon holding Stable Diffusion LCM + TAESD in VRAM. Receives `prompt_embeds` and performs single-step latent inference. | 10–12 FPS |
-| **`live_natural_vine_wm17.py`** | LSL / Local | Real-time PyTorch CUDA DSP, Kuramoto sync, SVD projection, C++ OpenCV Fast-DCT serialization, Tri-Panel UI. | 200+ FPS |
+| **`semanic_working_memory_sd_lcm.py`** | LSL / Local | Real-time PyTorch CUDA DSP, Kuramoto sync, SVD projection, C++ OpenCV Fast-DCT serialization, Tri-Panel UI. | 200+ FPS |
 
 ---
 
@@ -132,7 +132,7 @@ python brain_server.py
 
 ### 2. Start the High-Speed Neurofeedback Client:
 ```bash
-python live_natural_vine_wm17.py
+python semanic_working_memory_sd_lcm.py
 ```
 *(If no active LSL stream is detected, the engine falls back to real-time synthetic trajectory simulation).*
 
