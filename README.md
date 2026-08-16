@@ -71,28 +71,37 @@ The system maps non-invasive scalp phase dynamics into the 768-dimensional laten
 
 ### Stage 1: Preprocessing & Global Theta Extraction
 Raw bipolar channels are centered using Common Average Referencing (CAR) and notch-filtered at 50 Hz and 100 Hz. The global reference clock $\Phi_\theta(t)$ is computed via the Kuramoto order parameter over all 16 electrodes filtered around $6.0 \pm 1.5\text{ Hz}$:
+
 $$\Phi_\theta(t) = \mathrm{angle}\left( \frac{1}{16} \sum_{c=0}^{15} \frac{Z_{\theta, c}(t)}{|Z_{\theta, c}(t)|} \right)$$
+
 where $Z_{\theta, c}(t)$ is the complex analytic signal of channel $c$.
 
 ### Stage 2: Dense Gamma Slicing & von Mises Phase Gating
 The 30–85 Hz spectrum is segmented into 32 Gaussian bandpass filters $\mathbf{f}_{\gamma_k}$. Each frequency band is temporally weighted according to its position within the theta cycle:
+
 $$w_k(t) = \frac{\exp(3.2 \cos(\Phi_\theta(t) - \theta_k))}{\sum_\tau \exp(3.2 \cos(\Phi_\theta(\tau) - \theta_k))}, \quad \theta_k = -\pi + \frac{2\pi}{32}\left(k + 0.5\right)$$
 
 The gated cross-spectral phasor matrix for each electrode pair $p = (i, j)$ is:
+
 $$\boldsymbol{\Psi}_k(p) = \sum_{t} \left( P_{\gamma_k, i}(t) \cdot P_{\gamma_k, j}^*(t) \right) w_k(t)$$
 
 ### Stage 3: Anchor-Referenced VTE ($i\text{PLV}$)
 To eliminate Brownian drift and phase-wrapping, cross-spectral matrices are computed relative to the theta-cycle start anchor $\mathbf{\Psi}_0$ (Past / 30 Hz):
+
 $$i\text{PLV}_k(p) = \Im\left( \mathbf{\Psi}_k(p) \cdot \mathbf{\Psi}_0^*(p) \right) \in \mathbb{R}^{120}$$
 
 ### Stage 4: SVD Vocabulary Subspace Projection
 To prevent chaotic out-of-distribution latent trajectories, the 120-pair phase vectors are projected onto the top 120 singular vectors $\mathbf{V}_{120} \in \mathbb{R}^{120 \times 768}$ computed via SVD from the complete 49,408-token CLIP vocabulary embedding matrix $\mathbf{E}_{\text{vocab}}$: 
+
 $$\mathbf{h}_k = \frac{\mathrm{iPLV}_k \cdot \mathbf{V}_{120}}{|\mathrm{iPLV}_k \cdot \mathbf{V}_{120}| + \epsilon} \in \mathbb{R}^{768}$$
 
 ### Stage 5: Unbiased Attention-Sequence Injection
 The 32 temporal slots are interpolated along the 77-token Cross-Attention context length of Stable Diffusion:
+
 $$\mathbf{E}_{\text{drift}} = \mathrm{Interp}_{32 \to 77}(\mathbf{h}_{0..31}) \in \mathbb{R}^{1 \times 77 \times 768}$$
+
 $$\mathbf{E}_{\text{conditioning}} = \mathrm{Encode}(\text{" "}) + \alpha \cdot \frac{\mathbf{E}_{\text{drift}}}{| \mathbf{E}_{\text{drift}} |}$$
+
 where $\text{Encode}(\text{""})$ provides the structural positional encodings of an empty canvas, ensuring **zero text-prompt bias**.
 
 ---
