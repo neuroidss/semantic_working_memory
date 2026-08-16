@@ -71,7 +71,7 @@ The system maps non-invasive scalp phase dynamics into the 768-dimensional laten
 
 ### Stage 1: Preprocessing & Global Theta Extraction
 Raw bipolar channels are centered using Common Average Referencing (CAR) and notch-filtered at 50 Hz and 100 Hz. The global reference clock $\Phi_\theta(t)$ is computed via the Kuramoto order parameter over all 16 electrodes filtered around $6.0 \pm 1.5\text{ Hz}$:
-$$\Phi_\theta(t) = \operatorname{angle}\left( \frac{1}{16} \sum_{c=0}^{15} \frac{Z_{\theta, c}(t)}{|Z_{\theta, c}(t)|} \right)$$
+$$\Phi_\theta(t) = \mathrm{angle}\left( \frac{1}{16} \sum_{c=0}^{15} \frac{Z_{\theta, c}(t)}{|Z_{\theta, c}(t)|} \right)$$
 where $Z_{\theta, c}(t)$ is the complex analytic signal of channel $c$.
 
 ### Stage 2: Dense Gamma Slicing & von Mises Phase Gating
